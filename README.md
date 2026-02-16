@@ -4,7 +4,7 @@ A comprehensive, interactive financial planning assessment tool that evaluates y
 
 ## 🎯 Live Demo
 
-[Take the Assessment Now](https://georgecaulkins.github.io/Financial-Health-Checklist/)
+[Take the Assessment Now](https://georgecaulkins.github.io/index-2.html/)
 
 
 ---
