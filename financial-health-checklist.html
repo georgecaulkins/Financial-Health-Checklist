@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Health Checklist - Comprehensive Assessment</title>
+    <meta name="description" content="Take our comprehensive 48-question financial planning health assessment and get your personalized score across 10 key categories.">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { ChevronRight, ChevronLeft, CheckCircle2, AlertCircle, TrendingUp, Home, Heart, Shield, Briefcase, DollarSign, PiggyBank, FileText, Users } = lucide;
+
+        const FinancialHealthChecklist = () => {
+          const [currentQuestion, setCurrentQuestion] = useState(0);
+          const [answers, setAnswers] = useState({});
+          const [showResults, setShowResults] = useState(false);
+
+          const questions = [
+            // Emergency Fund & Cash Flow (3 questions)
+            {
+              id: 1,
+              category: "Emergency Fund & Cash Flow",
+              icon: "Shield",
+              question: "Do you have an emergency fund with 3-6 months of essential expenses in a readily accessible account?",
+              options: [
+                { text: "Yes, 6+ months saved", points: 10, feedback: "Excellent! You have strong financial security." },
+                { text: "Yes, 3-5 months saved", points: 7, feedback: "Good foundation. Consider building to 6 months." },
+                { text: "1-2 months saved", points: 3, feedback: "You're started, but need to prioritize building this up." },
+                { text: "No emergency fund", points: 0, feedback: "This should be your top priority before investing." }
+              ]
+            },
+            {
+              id: 2,
+              category: "Emergency Fund & Cash Flow",
+              icon: "Shield",
+              question: "Do you track your monthly income and expenses to understand your cash flow?",
+              options: [
+                { text: "Yes, detailed tracking with budgeting system", points: 10, feedback: "Outstanding awareness of your finances." },
+                { text: "Yes, general tracking monthly", points: 7, feedback: "Good habits. Consider more detailed categorization." },
+                { text: "Occasionally review statements", points: 3, feedback: "Increase frequency to gain better control." },
+                { text: "No tracking at all", points: 0, feedback: "Start tracking to identify savings opportunities." }
+              ]
+            },
+            {
+              id: 3,
+              category: "Emergency Fund & Cash Flow",
+              icon: "Shield",
+              question: "Are you consistently spending less than you earn each month?",
+              options: [
+                { text: "Yes, saving 20%+ of income", points: 10, feedback: "Exceptional saving rate!" },
+                { text: "Yes, saving 10-19% of income", points: 7, feedback: "Solid savings habit. Push toward 20% if possible." },
+                { text: "Breaking even or saving <10%", points: 3, feedback: "Look for areas to reduce expenses or increase income." },
+                { text: "Spending more than I earn", points: 0, feedback: "Urgent: Create a plan to reverse this immediately." }
+              ]
+            },
+
+            // Debt Management (3 questions)
+            {
+              id: 4,
+              category: "Debt Management",
+              icon: "DollarSign",
+              question: "Do you carry any high-interest debt (credit cards, personal loans over 8% interest)?",
+              options: [
+                { text: "No high-interest debt", points: 10, feedback: "Excellent! You've avoided wealth-eroding debt." },
+                { text: "Small balance, paying off aggressively", points: 7, feedback: "Good plan. Accelerate payoff if possible." },
+                { text: "Moderate balance, making minimum payments", points: 3, feedback: "Prioritize paying this down - it's costing you significantly." },
+                { text: "Large balance, struggling with payments", points: 0, feedback: "Consider debt consolidation or credit counseling." }
+              ]
+            },
+            {
+              id: 5,
+              category: "Debt Management",
+              icon: "DollarSign",
+              question: "If you have a mortgage, is it at a competitive interest rate for current market conditions?",
+              options: [
+                { text: "No mortgage or recently refinanced to great rate", points: 10, feedback: "Well positioned with your mortgage." },
+                { text: "Rate is competitive with market", points: 7, feedback: "Monitor rates periodically for refinance opportunities." },
+                { text: "Rate seems high, haven't explored refinancing", points: 3, feedback: "Review refinancing - could save thousands over loan term." },
+                { text: "High rate, struggling with payments", points: 0, feedback: "Speak with a mortgage advisor about options." }
+              ]
+            },
+            {
+              id: 6,
+              category: "Debt Management",
+              icon: "DollarSign",
+              question: "Are you making extra principal payments toward any debt to reduce interest costs?",
+              options: [
+                { text: "Yes, consistently on mortgage or student loans", points: 10, feedback: "Smart strategy for long-term wealth building." },
+                { text: "Occasionally when extra funds available", points: 7, feedback: "Consider automating extra payments if possible." },
+                { text: "No, only making minimum payments", points: 3, feedback: "Even small extra payments compound significantly." },
+                { text: "Behind on payments", points: 0, feedback: "Focus on getting current before extra payments." }
+              ]
+            },
+
+            // Retirement Planning (6 questions)
+            {
+              id: 7,
+              category: "Retirement Planning",
+              icon: "PiggyBank",
+              question: "Are you contributing to an employer-sponsored retirement plan (401k, 403b, etc.)?",
+              options: [
+                { text: "Yes, maxing out contributions ($23,000+ annually)", points: 10, feedback: "Outstanding! You're maximizing this powerful tool." },
+                { text: "Yes, getting full employer match", points: 7, feedback: "Good! Consider increasing if budget allows." },
+                { text: "Yes, but less than employer match", points: 3, feedback: "You're leaving free money on the table - increase to match." },
+                { text: "Not contributing or no plan available", points: 0, feedback: "Explore IRA options or advocate for plan at work." }
+              ]
+            },
+            {
+              id: 8,
+              category: "Retirement Planning",
+              icon: "PiggyBank",
+              question: "Have you calculated how much you'll need in retirement based on your desired lifestyle?",
+              options: [
+                { text: "Yes, detailed analysis with professional help", points: 10, feedback: "Excellent planning foundation!" },
+                { text: "Yes, used online calculators and rules of thumb", points: 7, feedback: "Good start. Consider professional validation." },
+                { text: "Rough estimate, no formal calculation", points: 3, feedback: "Time to get specific - your future depends on it." },
+                { text: "No idea what I'll need", points: 0, feedback: "This is critical - start with basic retirement calculators." }
+              ]
+            },
+            {
+              id: 9,
+              category: "Retirement Planning",
+              icon: "PiggyBank",
+              question: "Are you on track to meet your retirement savings goal based on current contributions?",
+              options: [
+                { text: "Yes, ahead of schedule", points: 10, feedback: "Fantastic! Consider reviewing goals as circumstances change." },
+                { text: "Yes, on track if I continue current pace", points: 7, feedback: "Stay disciplined and adjust for life changes." },
+                { text: "Behind, but have plan to catch up", points: 3, feedback: "Execute that catch-up plan - time is your ally." },
+                { text: "Significantly behind with no plan", points: 0, feedback: "Don't panic, but do act now - meet with an advisor." }
+              ]
+            },
+            {
+              id: 10,
+              category: "Retirement Planning",
+              icon: "PiggyBank",
+              question: "Do you have a strategy for where to draw retirement income from (Social Security timing, account withdrawal order)?",
+              options: [
+                { text: "Yes, detailed tax-efficient withdrawal strategy", points: 10, feedback: "This planning can save hundreds of thousands in taxes!" },
+                { text: "General understanding of strategy", points: 7, feedback: "Refine this as retirement approaches." },
+                { text: "Haven't thought about it yet", points: 3, feedback: "Not urgent if retirement is 10+ years away, but important." },
+                { text: "Retiring soon, no strategy", points: 0, feedback: "Critical to develop this NOW - significant tax implications." }
+              ]
+            },
+            {
+              id: 11,
+              category: "Retirement Planning",
+              icon: "PiggyBank",
+              question: "Have you estimated your Social Security benefits and planned when you'll claim them?",
+              options: [
+                { text: "Yes, reviewed statement and have claiming strategy", points: 10, feedback: "Smart! Timing can increase benefits by 75%+." },
+                { text: "Reviewed statement, no claiming strategy yet", points: 7, feedback: "Create strategy as you approach 60." },
+                { text: "Haven't checked in years", points: 3, feedback: "Review annually at ssa.gov for accuracy." },
+                { text: "Never reviewed", points: 0, feedback: "Check your statement - you may have errors to correct." }
+              ]
+            },
+            {
+              id: 12,
+              category: "Retirement Planning",
+              icon: "PiggyBank",
+              question: "If you're over 50, are you taking advantage of catch-up contributions?",
+              options: [
+                { text: "Yes, maxing catch-up contributions", points: 10, feedback: "Excellent use of this benefit!" },
+                { text: "Contributing some catch-up", points: 7, feedback: "Increase if possible - limited time to use this." },
+                { text: "Not using catch-up but eligible", points: 3, feedback: "You can contribute extra $7,500 to 401k, $1,000 to IRA." },
+                { text: "Under 50 or not applicable", points: 10, feedback: "N/A - Keep this in mind for the future!" }
+              ]
+            },
+
+            // Investment Strategy (7 questions)
+            {
+              id: 13,
+              category: "Investment Strategy",
+              icon: "TrendingUp",
+              question: "Do you have a written investment policy statement or clear investment strategy?",
+              options: [
+                { text: "Yes, documented and reviewed annually", points: 10, feedback: "Professional approach to investing!" },
+                { text: "Clear strategy in mind, not written", points: 7, feedback: "Writing it down helps maintain discipline." },
+                { text: "General approach, not formalized", points: 3, feedback: "Formalize this to avoid emotional decisions." },
+                { text: "No clear strategy", points: 0, feedback: "Critical to establish - prevents costly mistakes." }
+              ]
+            },
+            {
+              id: 14,
+              category: "Investment Strategy",
+              icon: "TrendingUp",
+              question: "Is your portfolio properly diversified across asset classes (stocks, bonds, real estate, etc.)?",
+              options: [
+                { text: "Yes, diversified with intentional allocation", points: 10, feedback: "Reduces risk while maintaining growth potential." },
+                { text: "Mostly diversified, some concentration", points: 7, feedback: "Review concentrated positions for risk." },
+                { text: "Limited diversification", points: 3, feedback: "You're taking unnecessary risk - diversify." },
+                { text: "All in one or two investments", points: 0, feedback: "Extremely risky - diversify immediately." }
+              ]
+            },
+            {
+              id: 15,
+              category: "Investment Strategy",
+              icon: "TrendingUp",
+              question: "Does your asset allocation match your risk tolerance and time horizon?",
+              options: [
+                { text: "Yes, regularly rebalanced to target", points: 10, feedback: "Disciplined approach that compounds over time." },
+                { text: "Generally appropriate, occasional review", points: 7, feedback: "Set calendar reminder for annual rebalancing." },
+                { text: "Not sure if it's appropriate", points: 3, feedback: "Complete a risk tolerance questionnaire." },
+                { text: "Never thought about it", points: 0, feedback: "Misalignment can be costly - assess this now." }
+              ]
+            },
+            {
+              id: 16,
+              category: "Investment Strategy",
+              icon: "TrendingUp",
+              question: "Are you minimizing investment fees and expenses (expense ratios, advisory fees, transaction costs)?",
+              options: [
+                { text: "Yes, primarily low-cost index funds/ETFs", points: 10, feedback: "Fees matter more than most realize - well done!" },
+                { text: "Mix of low-cost and higher-cost investments", points: 7, feedback: "Review if higher-cost funds justify their fees." },
+                { text: "Haven't evaluated fees recently", points: 3, feedback: "Even 1% difference equals hundreds of thousands over time." },
+                { text: "No idea what I'm paying", points: 0, feedback: "Review immediately - fees may be eroding your wealth." }
+              ]
+            },
+            {
+              id: 17,
+              category: "Investment Strategy",
+              icon: "TrendingUp",
+              question: "Do you understand the tax implications of your investment accounts (taxable vs. tax-deferred vs. tax-free)?",
+              options: [
+                { text: "Yes, strategic asset location for tax efficiency", points: 10, feedback: "Advanced strategy that can save enormous amounts." },
+                { text: "Understand basics, room to optimize", points: 7, feedback: "Consider which investments go in which account types." },
+                { text: "Limited understanding", points: 3, feedback: "Learn about tax-loss harvesting and asset location." },
+                { text: "No understanding of tax implications", points: 0, feedback: "This knowledge is worth thousands annually." }
+              ]
+            },
+            {
+              id: 18,
+              category: "Investment Strategy",
+              icon: "TrendingUp",
+              question: "Are you taking advantage of both Roth and traditional retirement account benefits?",
+              options: [
+                { text: "Yes, strategic mix based on current/future tax rates", points: 10, feedback: "Tax diversification provides valuable flexibility." },
+                { text: "Contributing to one type consistently", points: 7, feedback: "Consider if mixing would be beneficial." },
+                { text: "Not sure which is better for me", points: 3, feedback: "Analyze your current vs. expected retirement tax bracket." },
+                { text: "Don't understand the difference", points: 0, feedback: "Learn this - can save tens of thousands in taxes." }
+              ]
+            },
+            {
+              id: 19,
+              category: "Investment Strategy",
+              icon: "TrendingUp",
+              question: "Do you avoid making emotional investment decisions based on market volatility?",
+              options: [
+                { text: "Yes, stay disciplined through ups and downs", points: 10, feedback: "This discipline is the key to long-term wealth." },
+                { text: "Mostly disciplined, occasional anxiety", points: 7, feedback: "Normal feelings - focus on your long-term plan." },
+                { text: "Sometimes panic during downturns", points: 3, feedback: "Review your risk tolerance - you may be too aggressive." },
+                { text: "Frequently buy high, sell low emotionally", points: 0, feedback: "This is wealth-destroying - work with an advisor." }
+              ]
+            },
+
+            // Insurance & Risk Management (5 questions)
+            {
+              id: 20,
+              category: "Insurance & Risk Management",
+              icon: "Shield",
+              question: "Do you have adequate life insurance if others depend on your income?",
+              options: [
+                { text: "Yes, 10-12x income or needs-based analysis", points: 10, feedback: "Provides comprehensive protection for your family." },
+                { text: "Yes, coverage through employer only", points: 5, feedback: "Consider supplementing - employer coverage may be insufficient." },
+                { text: "Minimal coverage, haven't reviewed", points: 3, feedback: "Calculate needs: debts + income replacement + expenses." },
+                { text: "No coverage or N/A (no dependents)", points: 0, feedback: "N/A or address immediately if you have dependents." }
+              ]
+            },
+            {
+              id: 21,
+              category: "Insurance & Risk Management",
+              icon: "Shield",
+              question: "Do you have disability insurance to replace income if you can't work?",
+              options: [
+                { text: "Yes, coverage replacing 60-70% of income", points: 10, feedback: "Critical protection most people overlook!" },
+                { text: "Yes, employer coverage only", points: 5, feedback: "Verify coverage amount and consider supplementing." },
+                { text: "No coverage", points: 0, feedback: "You're more likely to become disabled than die - get coverage." },
+                { text: "N/A - already retired or independently wealthy", points: 10, feedback: "Not applicable to your situation." }
+              ]
+            },
+            {
+              id: 22,
+              category: "Insurance & Risk Management",
+              icon: "Shield",
+              question: "Is your health insurance adequate with reasonable out-of-pocket maximums?",
+              options: [
+                { text: "Yes, appropriate coverage and HSA if eligible", points: 10, feedback: "Healthcare costs managed and HSA provides triple tax benefit." },
+                { text: "Yes, adequate coverage", points: 7, feedback: "Consider HSA if you have high-deductible plan." },
+                { text: "Minimal coverage to save on premiums", points: 3, feedback: "Medical bankruptcy is real - ensure adequate coverage." },
+                { text: "Uninsured or severely underinsured", points: 0, feedback: "Extremely risky - one medical event could devastate finances." }
+              ]
+            },
+            {
+              id: 23,
+              category: "Insurance & Risk Management",
+              icon: "Shield",
+              question: "Do you have appropriate property and liability insurance (home, auto, umbrella)?",
+              options: [
+                { text: "Yes, including umbrella policy for extra liability", points: 10, feedback: "Comprehensive protection. Umbrella is cost-effective coverage." },
+                { text: "Yes, standard home and auto coverage", points: 7, feedback: "Consider umbrella if net worth >$500k." },
+                { text: "Minimum coverage to meet requirements", points: 3, feedback: "Underinsurance can be financially devastating." },
+                { text: "No coverage or very limited", points: 0, feedback: "One lawsuit could destroy everything you've built." }
+              ]
+            },
+            {
+              id: 24,
+              category: "Insurance & Risk Management",
+              icon: "Shield",
+              question: "Have you considered long-term care insurance or have a plan for potential care costs?",
+              options: [
+                { text: "Yes, insurance or dedicated savings strategy", points: 10, feedback: "Prepared for one of retirement's biggest risks." },
+                { text: "On the radar, researching options", points: 7, feedback: "Buy in your 50s for best rates if going this route." },
+                { text: "Haven't thought about it", points: 3, feedback: "Average person needs care for 3 years at $100k+/year." },
+                { text: "Not applicable yet - under 40", points: 10, feedback: "Too early - revisit in your 50s." }
+              ]
+            },
+
+            // Tax Planning (5 questions)
+            {
+              id: 25,
+              category: "Tax Planning",
+              icon: "FileText",
+              question: "Do you work with a tax professional or use tax software to optimize your return?",
+              options: [
+                { text: "Yes, CPA/tax professional with proactive planning", points: 10, feedback: "Proactive planning saves far more than return preparation alone." },
+                { text: "Yes, tax software and I'm knowledgeable", points: 7, feedback: "Consider professional review if situation is complex." },
+                { text: "Basic filing, minimal optimization", points: 3, feedback: "You may be overpaying - explore tax strategies." },
+                { text: "Often file late or ignore opportunities", points: 0, feedback: "Penalties and missed deductions are costing you." }
+              ]
+            },
+            {
+              id: 26,
+              category: "Tax Planning",
+              icon: "FileText",
+              question: "Are you maximizing tax-advantaged accounts (HSA, FSA, 529, etc.)?",
+              options: [
+                { text: "Yes, using all available accounts strategically", points: 10, feedback: "HSAs especially are powerful wealth-building tools!" },
+                { text: "Using some, not all available options", points: 7, feedback: "Review which additional accounts make sense for you." },
+                { text: "Only using basic retirement accounts", points: 3, feedback: "Missing valuable tax savings opportunities." },
+                { text: "Not utilizing any tax-advantaged accounts", points: 0, feedback: "You're giving up free money - start with 401k/IRA." }
+              ]
+            },
+            {
+              id: 27,
+              category: "Tax Planning",
+              icon: "FileText",
+              question: "Do you understand and utilize tax-loss harvesting in taxable investment accounts?",
+              options: [
+                { text: "Yes, regularly harvest losses to offset gains", points: 10, feedback: "Advanced strategy that can save thousands annually." },
+                { text: "Understand it, don't consistently apply", points: 7, feedback: "Consider automating with robo-advisor or tracking it." },
+                { text: "Heard of it, don't understand it", points: 3, feedback: "Learn this strategy - it's relatively simple and valuable." },
+                { text: "No knowledge of this strategy", points: 0, feedback: "For taxable accounts, this can significantly reduce taxes." }
+              ]
+            },
+            {
+              id: 28,
+              category: "Tax Planning",
+              icon: "FileText",
+              question: "Are you tracking deductible expenses and taking all available deductions/credits?",
+              options: [
+                { text: "Yes, detailed records and maximizing deductions", points: 10, feedback: "Thorough recordkeeping pays off!" },
+                { text: "Tracking major items, may miss some", points: 7, feedback: "Review common deductions you might be missing." },
+                { text: "Taking standard deduction only", points: 5, feedback: "May be optimal, but verify you're not leaving money on table." },
+                { text: "Not tracking or unsure what's deductible", points: 0, feedback: "Learn what you can deduct - education pays for itself." }
+              ]
+            },
+            {
+              id: 29,
+              category: "Tax Planning",
+              icon: "FileText",
+              question: "Have you planned for required minimum distributions (RMDs) if you're approaching 73?",
+              options: [
+                { text: "Yes, strategy in place for RMDs", points: 10, feedback: "Good planning can minimize tax impact of RMDs." },
+                { text: "Understand them, will plan when closer", points: 7, feedback: "Consider Roth conversions before RMDs start." },
+                { text: "Not sure what RMDs are", points: 3, feedback: "You'll be forced to withdraw from retirement accounts at 73." },
+                { text: "Under 60 - not applicable yet", points: 10, feedback: "Not urgent, but keep in mind for future." }
+              ]
+            },
+
+            // Estate Planning (7 questions)
+            {
+              id: 30,
+              category: "Estate Planning",
+              icon: "Users",
+              question: "Do you have an up-to-date will that reflects your current wishes?",
+              options: [
+                { text: "Yes, reviewed within past 3 years", points: 10, feedback: "Essential document that's current - excellent!" },
+                { text: "Yes, but 3-5+ years old", points: 5, feedback: "Review now - laws and your situation may have changed." },
+                { text: "Have one but very outdated", points: 2, feedback: "Update immediately - may not reflect current wishes." },
+                { text: "No will", points: 0, feedback: "State decides who gets your assets without one - create ASAP." }
+              ]
+            },
+            {
+              id: 31,
+              category: "Estate Planning",
+              icon: "Users",
+              question: "Do you have appropriate powers of attorney (healthcare and financial)?",
+              options: [
+                { text: "Yes, both healthcare and durable financial POA", points: 10, feedback: "Critical documents everyone over 18 needs!" },
+                { text: "Have one type, not both", points: 5, feedback: "Complete the set - both are essential." },
+                { text: "Outdated or questionable agent selected", points: 2, feedback: "Review and update - wrong agent can be problematic." },
+                { text: "No powers of attorney", points: 0, feedback: "If incapacitated, loved ones may need court guardianship." }
+              ]
+            },
+            {
+              id: 32,
+              category: "Estate Planning",
+              icon: "Users",
+              question: "Have you reviewed and updated beneficiaries on all accounts (retirement, insurance, bank)?",
+              options: [
+                { text: "Yes, reviewed within past year", points: 10, feedback: "Beneficiary designations override your will - critical to keep current!" },
+                { text: "Reviewed within past 3 years", points: 7, feedback: "Review after major life events (marriage, divorce, births)." },
+                { text: "Not sure who's listed", points: 2, feedback: "Check immediately - ex-spouses often left accidentally." },
+                { text: "Never reviewed", points: 0, feedback: "Assets may go to unintended people - check all accounts now." }
+              ]
+            },
+            {
+              id: 33,
+              category: "Estate Planning",
+              icon: "Users",
+              question: "If you have minor children, have you designated guardians in your will?",
+              options: [
+                { text: "Yes, guardians named and discussed with them", points: 10, feedback: "Most important decision in your will - well done!" },
+                { text: "Named but haven't discussed with them", points: 7, feedback: "Have the conversation - they need to be willing." },
+                { text: "Haven't designated guardians", points: 0, feedback: "Court will decide who raises your children without this." },
+                { text: "N/A - no minor children", points: 10, feedback: "Not applicable to your situation." }
+              ]
+            },
+            {
+              id: 34,
+              category: "Estate Planning",
+              icon: "Users",
+              question: "Do you need a trust, and if so, do you have one properly funded?",
+              options: [
+                { text: "Have trust and it's properly funded", points: 10, feedback: "Trusts only work if assets are titled correctly - great job!" },
+                { text: "Have trust, not fully funded", points: 5, feedback: "Unfunded trust is worthless - transfer assets into it." },
+                { text: "Need one but don't have it", points: 2, feedback: "Consider if you have >$500k, want privacy, or special needs planning." },
+                { text: "Don't need one based on situation", points: 10, feedback: "Simple estates may not need trust - will is sufficient." }
+              ]
+            },
+            {
+              id: 35,
+              category: "Estate Planning",
+              icon: "Users",
+              question: "Do you have a plan to minimize estate taxes if your estate is large (>$13.6M individual)?",
+              options: [
+                { text: "Yes, comprehensive estate tax planning", points: 10, feedback: "Advanced planning can save millions for heirs." },
+                { text: "Working on it with professionals", points: 7, feedback: "Keep moving forward - don't delay." },
+                { text: "Large estate, no tax planning", points: 0, feedback: "40% federal tax + state tax can devastate estate - get help now!" },
+                { text: "Estate under exemption threshold", points: 10, feedback: "Not needed unless your estate is very large." }
+              ]
+            },
+            {
+              id: 36,
+              category: "Estate Planning",
+              icon: "Users",
+              question: "Have you documented where your important documents and accounts are located?",
+              options: [
+                { text: "Yes, organized binder/system with passwords", points: 10, feedback: "Saves loved ones enormous stress during difficult time." },
+                { text: "Mostly organized, some gaps", points: 7, feedback: "Complete the documentation - include digital assets." },
+                { text: "Some documentation, not comprehensive", points: 3, feedback: "Family may struggle to locate everything - organize now." },
+                { text: "Nothing documented", points: 0, feedback: "Create a 'legacy drawer' with all important info." }
+              ]
+            },
+
+            // Education Planning (3 questions)
+            {
+              id: 37,
+              category: "Education Planning",
+              icon: "Briefcase",
+              question: "If you have children, are you saving for their education expenses?",
+              options: [
+                { text: "Yes, 529 plan with regular contributions", points: 10, feedback: "Tax-advantaged growth will significantly help!" },
+                { text: "Yes, in taxable accounts or other vehicles", points: 7, feedback: "Consider 529 for state tax benefits and tax-free growth." },
+                { text: "Planning to start but haven't yet", points: 3, feedback: "Start now - time is your best ally with compound growth." },
+                { text: "No children or they're financially independent", points: 10, feedback: "Not applicable to your situation." }
+              ]
+            },
+            {
+              id: 38,
+              category: "Education Planning",
+              icon: "Briefcase",
+              question: "Have you researched education funding strategies (529s, ESAs, financial aid impacts)?",
+              options: [
+                { text: "Yes, comprehensive understanding and strategy", points: 10, feedback: "Asset ownership and timing can significantly impact aid." },
+                { text: "Basic understanding, room to learn more", points: 7, feedback: "Understand how assets in different accounts affect FAFSA." },
+                { text: "Limited knowledge", points: 3, feedback: "Mistakes here can cost tens of thousands in lost aid." },
+                { text: "N/A - no education funding needed", points: 10, feedback: "Not applicable to your situation." }
+              ]
+            },
+            {
+              id: 39,
+              category: "Education Planning",
+              icon: "Briefcase",
+              question: "Are you balancing education savings with your own retirement (not over-prioritizing college)?",
+              options: [
+                { text: "Yes, retirement takes priority appropriately", points: 10, feedback: "Can't borrow for retirement! Smart prioritization." },
+                { text: "Balanced approach to both", points: 7, feedback: "Ensure you're on track for retirement first." },
+                { text: "Prioritizing college over retirement", points: 2, feedback: "Flip this - you'll burden your kids if you're not secure." },
+                { text: "N/A", points: 10, feedback: "Not applicable to your situation." }
+              ]
+            },
+
+            // Specialized Situations (4 questions)
+            {
+              id: 40,
+              category: "Specialized Situations",
+              icon: "Heart",
+              question: "If you're a business owner, do you have a succession/exit plan?",
+              options: [
+                { text: "Yes, documented plan with key people identified", points: 10, feedback: "Business continuity planning protects your legacy." },
+                { text: "Informal plan, needs documentation", points: 7, feedback: "Formalize this - too important to leave vague." },
+                { text: "No plan", points: 0, feedback: "Your business may be your largest asset - plan for it." },
+                { text: "N/A - not a business owner", points: 10, feedback: "Not applicable to your situation." }
+              ]
+            },
+            {
+              id: 41,
+              category: "Specialized Situations",
+              icon: "Heart",
+              question: "If you have aging parents, have you discussed their financial situation and plans?",
+              options: [
+                { text: "Yes, understand their plans and readiness", points: 10, feedback: "Difficult conversation that prevents future crisis." },
+                { text: "Some discussion, not comprehensive", points: 7, feedback: "Ask about LTC insurance, long-term plans, documents." },
+                { text: "Haven't had the conversation", points: 2, feedback: "Do this soon - much easier to plan than react to crisis." },
+                { text: "N/A - parents deceased or don't need support", points: 10, feedback: "Not applicable to your situation." }
+              ]
+            },
+            {
+              id: 42,
+              category: "Specialized Situations",
+              icon: "Heart",
+              question: "Do you have adequate coverage for unique assets (jewelry, art, collectibles)?",
+              options: [
+                { text: "Yes, scheduled items with appraisals", points: 10, feedback: "Standard policies have low limits - smart to schedule." },
+                { text: "Relying on standard policy limits", points: 5, feedback: "Verify limits - often only $1-2k for jewelry, art." },
+                { text: "Haven't thought about it", points: 0, feedback: "Get appraisals and add riders for valuable items." },
+                { text: "N/A - no valuable collectibles", points: 10, feedback: "Not applicable to your situation." }
+              ]
+            },
+            {
+              id: 43,
+              category: "Specialized Situations",
+              icon: "Heart",
+              question: "If you expect an inheritance, has it been factored appropriately into your plan?",
+              options: [
+                { text: "Yes, but not counting on it for core planning", points: 10, feedback: "Perfect approach - bonus if it comes, secure if not." },
+                { text: "Aware of it but not in my calculations", points: 7, feedback: "Good - too many variables to rely on inheritance." },
+                { text: "Counting on it significantly", points: 2, feedback: "Risky - circumstances, health, remarriage can change everything." },
+                { text: "N/A - no expected inheritance", points: 10, feedback: "Not applicable to your situation." }
+              ]
+            },
+
+            // Goals & Review (5 questions)
+            {
+              id: 44,
+              category: "Goals & Review",
+              icon: "CheckCircle2",
+              question: "Have you defined specific financial goals with timelines (retirement age, home purchase, etc.)?",
+              options: [
+                { text: "Yes, written goals with target dates and amounts", points: 10, feedback: "Specific goals dramatically increase success rates!" },
+                { text: "Mental goals, not written down", points: 7, feedback: "Write them down and review quarterly." },
+                { text: "Vague aspirations without specifics", points: 3, feedback: "Get specific - 'retire comfortably' isn't actionable." },
+                { text: "No defined goals", points: 0, feedback: "You're drifting - define what you're working toward." }
+              ]
+            },
+            {
+              id: 45,
+              category: "Goals & Review",
+              icon: "CheckCircle2",
+              question: "Do you review your complete financial situation at least annually?",
+              options: [
+                { text: "Yes, comprehensive review with advisor or independently", points: 10, feedback: "Annual review catches problems early and adjusts for changes." },
+                { text: "Partial reviews when something prompts it", points: 7, feedback: "Schedule comprehensive annual review - calendar it." },
+                { text: "Rarely review everything together", points: 3, feedback: "Financial plan is dynamic - needs regular attention." },
+                { text: "Never do comprehensive reviews", points: 0, feedback: "Start now - lots can drift out of alignment over time." }
+              ]
+            },
+            {
+              id: 46,
+              category: "Goals & Review",
+              icon: "CheckCircle2",
+              question: "Do you adjust your plan after major life events (marriage, children, job change, inheritance)?",
+              options: [
+                { text: "Yes, promptly review and adjust after changes", points: 10, feedback: "Life changes demand plan changes - well done!" },
+                { text: "Eventually get around to adjusting", points: 7, feedback: "Make it immediate habit - delay creates risk." },
+                { text: "Often forget to adjust", points: 3, feedback: "Set reminders after major events to review plan." },
+                { text: "Never thought to adjust for life changes", points: 0, feedback: "Your plan should evolve as your life does." }
+              ]
+            },
+            {
+              id: 47,
+              category: "Goals & Review",
+              icon: "CheckCircle2",
+              question: "Are you working with qualified financial professionals (CFP, CPA, attorney) when needed?",
+              options: [
+                { text: "Yes, established relationships with credentialed team", points: 10, feedback: "Right professionals save far more than they cost!" },
+                { text: "Work with some professionals occasionally", points: 7, feedback: "Consider building ongoing relationships for proactive advice." },
+                { text: "Do everything myself", points: 3, feedback: "DIY can work but consider complexity of your situation." },
+                { text: "Need help but haven't sought professionals", points: 0, feedback: "Initial consultation is often free - explore options." }
+              ]
+            },
+            {
+              id: 48,
+              category: "Goals & Review",
+              icon: "CheckCircle2",
+              question: "Do you feel confident and in control of your financial future?",
+              options: [
+                { text: "Yes, clear plan and comfortable with trajectory", points: 10, feedback: "Financial confidence is invaluable for overall wellbeing!" },
+                { text: "Mostly confident, some uncertainty", points: 7, feedback: "Address areas of uncertainty - knowledge reduces anxiety." },
+                { text: "Often worried or uncertain", points: 3, feedback: "This feeling indicates you need to address something - don't ignore it." },
+                { text: "Overwhelmed or anxious about finances", points: 0, feedback: "Seek help - financial stress affects every area of life." }
+              ]
+            }
+          ];
+
+          const getIcon = (iconName) => {
+            const icons = { Shield, DollarSign, PiggyBank, TrendingUp, FileText, Users, Briefcase, Heart, CheckCircle2 };
+            return icons[iconName] || Shield;
+          };
+
+          const handleAnswer = (points, feedback) => {
+            const newAnswers = {
+              ...answers,
+              [questions[currentQuestion].id]: { 
+                points, 
+                feedback,
+                category: questions[currentQuestion].category 
+              }
+            };
+            setAnswers(newAnswers);
+
+            if (currentQuestion < questions.length - 1) {
+              setTimeout(() => {
+                setCurrentQuestion(currentQuestion + 1);
+              }, 300);
+            } else {
+              setTimeout(() => {
+                setShowResults(true);
+              }, 300);
+            }
+          };
+
+          const goBack = () => {
+            if (currentQuestion > 0) {
+              setCurrentQuestion(currentQuestion - 1);
+            }
+          };
+
+          const resetQuiz = () => {
+            setCurrentQuestion(0);
+            setAnswers({});
+            setShowResults(false);
+          };
+
+          const calculateResults = () => {
+            const totalPossible = questions.reduce((sum, q) => sum + 10, 0);
+            const earnedPoints = Object.values(answers).reduce((sum, a) => sum + a.points, 0);
+            const percentage = Math.round((earnedPoints / totalPossible) * 100);
+
+            const categoryScores = {};
+            questions.forEach(q => {
+              if (!categoryScores[q.category]) {
+                categoryScores[q.category] = { earned: 0, possible: 0 };
+              }
+              categoryScores[q.category].possible += 10;
+              if (answers[q.id]) {
+                categoryScores[q.category].earned += answers[q.id].points;
+              }
+            });
+
+            return { earnedPoints, totalPossible, percentage, categoryScores };
+          };
+
+          const getScoreColor = (percentage) => {
+            if (percentage >= 85) return '#10b981';
+            if (percentage >= 70) return '#3b82f6';
+            if (percentage >= 50) return '#f59e0b';
+            return '#ef4444';
+          };
+
+          const getScoreLabel = (percentage) => {
+            if (percentage >= 85) return 'Excellent';
+            if (percentage >= 70) return 'Good';
+            if (percentage >= 50) return 'Fair';
+            return 'Needs Attention';
+          };
+
+          if (showResults) {
+            const { earnedPoints, totalPossible, percentage, categoryScores } = calculateResults();
+            const scoreColor = getScoreColor(percentage);
+
+            return React.createElement('div', {
+              style: {
+                minHeight: '100vh',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                padding: '40px 20px',
+                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+              }
+            },
+              React.createElement('div', {
+                style: {
+                  maxWidth: '900px',
+                  margin: '0 auto',
+                  background: 'white',
+                  borderRadius: '24px',
+                  padding: '48px',
+                  boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
+                }
+              },
+                React.createElement('div', { style: { textAlign: 'center', marginBottom: '48px' } },
+                  React.createElement('div', {
+                    style: {
+                      width: '120px',
+                      height: '120px',
+                      borderRadius: '50%',
+                      background: `linear-gradient(135deg, ${scoreColor}, ${scoreColor}dd)`,
+                      margin: '0 auto 24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '48px',
+                      fontWeight: '800',
+                      color: 'white',
+                      boxShadow: `0 8px 32px ${scoreColor}66`
+                    }
+                  }, `${percentage}%`),
+                  React.createElement('h1', {
+                    style: {
+                      fontSize: '36px',
+                      fontWeight: '800',
+                      color: '#1f2937',
+                      marginBottom: '12px'
+                    }
+                  }, 'Your Financial Health Score'),
+                  React.createElement('p', {
+                    style: {
+                      fontSize: '20px',
+                      color: scoreColor,
+                      fontWeight: '600'
+                    }
+                  }, `${getScoreLabel(percentage)} - ${earnedPoints} out of ${totalPossible} points`)
+                ),
+                React.createElement('div', {
+                  style: {
+                    background: '#f9fafb',
+                    borderRadius: '16px',
+                    padding: '32px',
+                    marginBottom: '40px'
+                  }
+                },
+                  React.createElement('h2', {
+                    style: {
+                      fontSize: '24px',
+                      fontWeight: '700',
+                      color: '#1f2937',
+                      marginBottom: '24px'
+                    }
+                  }, 'Score by Category'),
+                  Object.entries(categoryScores).map(([category, scores], idx) => {
+                    const catPercentage = Math.round((scores.earned / scores.possible) * 100);
+                    const catColor = getScoreColor(catPercentage);
+                    
+                    return React.createElement('div', { key: idx, style: { marginBottom: '20px' } },
+                      React.createElement('div', {
+                        style: {
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          marginBottom: '8px'
+                        }
+                      },
+                        React.createElement('span', { style: { fontWeight: '600', color: '#4b5563' } }, category),
+                        React.createElement('span', { style: { fontWeight: '700', color: catColor } }, `${catPercentage}%`)
+                      ),
+                      React.createElement('div', {
+                        style: {
+                          height: '12px',
+                          background: '#e5e7eb',
+                          borderRadius: '999px',
+                          overflow: 'hidden'
+                        }
+                      },
+                        React.createElement('div', {
+                          style: {
+                            height: '100%',
+                            width: `${catPercentage}%`,
+                            background: catColor,
+                            transition: 'width 1s ease-out',
+                            borderRadius: '999px'
+                          }
+                        })
+                      )
+                    );
+                  })
+                ),
+                React.createElement('div', {
+                  style: {
+                    background: '#fef3c7',
+                    border: '2px solid #f59e0b',
+                    borderRadius: '16px',
+                    padding: '24px',
+                    marginBottom: '32px'
+                  }
+                },
+                  React.createElement('h3', {
+                    style: {
+                      fontSize: '20px',
+                      fontWeight: '700',
+                      color: '#92400e',
+                      marginBottom: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }
+                  },
+                    React.createElement(AlertCircle, { size: 24 }),
+                    'Personalized Recommendations'
+                  ),
+                  React.createElement('div', { style: { color: '#78350f', lineHeight: '1.6' } },
+                    percentage >= 85 
+                      ? React.createElement('p', null, React.createElement('strong', null, 'Outstanding work!'), ' Your financial plan is comprehensive and well-executed. Continue your disciplined approach, review annually, and consider yourself a model for others. Focus on maintaining your excellent habits and staying up-to-date with tax law changes.')
+                      : percentage >= 70 
+                      ? React.createElement('p', null, React.createElement('strong', null, 'Solid foundation!'), ' You have many key elements in place. Focus on the categories where you scored below 70% - these represent your biggest opportunities for improvement. Consider scheduling a comprehensive review with a financial advisor to identify specific action items.')
+                      : percentage >= 50 
+                      ? React.createElement('p', null, React.createElement('strong', null, 'Good starting point.'), ' You\'ve taken some important steps, but significant gaps remain. Prioritize: (1) Emergency fund, (2) High-interest debt elimination, (3) Retirement contributions to get employer match, (4) Basic insurance coverage. These fundamentals will dramatically improve your financial security.')
+                      : React.createElement('p', null, React.createElement('strong', null, 'Time to take action.'), ' Your financial plan needs immediate attention. Don\'t be discouraged - awareness is the first step! Schedule a meeting with a fee-only financial planner (CFP®) to create a comprehensive action plan. Start with: emergency fund, debt reduction, and basic insurance coverage. Small steps now will compound into major improvements.')
+                  )
+                ),
+                React.createElement('div', {
+                  style: {
+                    background: '#eff6ff',
+                    borderRadius: '16px',
+                    padding: '24px',
+                    marginBottom: '32px'
+                  }
+                },
+                  React.createElement('h3', {
+                    style: {
+                      fontSize: '20px',
+                      fontWeight: '700',
+                      color: '#1e40af',
+                      marginBottom: '16px'
+                    }
+                  }, 'Top 3 Priority Areas'),
+                  React.createElement('div', { style: { color: '#1e3a8a', lineHeight: '1.8' } },
+                    Object.entries(categoryScores)
+                      .sort((a, b) => {
+                        const aPerc = (a[1].earned / a[1].possible);
+                        const bPerc = (b[1].earned / b[1].possible);
+                        return aPerc - bPerc;
+                      })
+                      .slice(0, 3)
+                      .map(([category, scores], idx) => {
+                        const catPercentage = Math.round((scores.earned / scores.possible) * 100);
+                        return React.createElement('div', {
+                          key: idx,
+                          style: {
+                            padding: '12px',
+                            background: 'white',
+                            borderRadius: '8px',
+                            marginBottom: '12px',
+                            borderLeft: `4px solid ${getScoreColor(catPercentage)}`
+                          }
+                        },
+                          React.createElement('strong', null, `${idx + 1}. ${category}`),
+                          ` - ${catPercentage}% (${scores.earned}/${scores.possible} points)`
+                        );
+                      })
+                  )
+                ),
+                React.createElement('div', {
+                  style: {
+                    display: 'flex',
+                    gap: '16px',
+                    justifyContent: 'center'
+                  }
+                },
+                  React.createElement('button', {
+                    onClick: resetQuiz,
+                    style: {
+                      padding: '16px 32px',
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '12px',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
+                      transition: 'transform 0.2s, box-shadow 0.2s'
+                    },
+                    onMouseOver: (e) => {
+                      e.target.style.transform = 'translateY(-2px)';
+                      e.target.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.6)';
+                    },
+                    onMouseOut: (e) => {
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
+                    }
+                  }, 'Retake Assessment')
+                ),
+                React.createElement('div', {
+                  style: {
+                    marginTop: '40px',
+                    paddingTop: '32px',
+                    borderTop: '2px solid #e5e7eb',
+                    fontSize: '14px',
+                    color: '#6b7280',
+                    lineHeight: '1.6'
+                  }
+                },
+                  React.createElement('p', { style: { marginBottom: '12px' } },
+                    React.createElement('strong', null, 'Disclaimer:'),
+                    ' This assessment is for educational purposes only and does not constitute financial advice. Your score is based on general best practices and may not account for your unique circumstances. Please consult with a qualified financial professional (CFP®, CPA, or attorney) before making significant financial decisions.'
+                  ),
+                  React.createElement('p', null,
+                    React.createElement('strong', null, 'Next Steps:'),
+                    ' Save these results and schedule a consultation with a fee-only fiduciary financial advisor to create a personalized action plan addressing your specific situation.'
+                  )
+                )
+              )
+            );
+          }
+
+          const currentQ = questions[currentQuestion];
+          const Icon = getIcon(currentQ.icon);
+          const progress = ((currentQuestion + 1) / questions.length) * 100;
+
+          return React.createElement('div', {
+            style: {
+              minHeight: '100vh',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              padding: '40px 20px',
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+            }
+          },
+            React.createElement('div', {
+              style: {
+                maxWidth: '800px',
+                margin: '0 auto'
+              }
+            },
+              React.createElement('div', {
+                style: {
+                  textAlign: 'center',
+                  marginBottom: '40px',
+                  color: 'white'
+                }
+              },
+                React.createElement('h1', {
+                  style: {
+                    fontSize: '42px',
+                    fontWeight: '800',
+                    marginBottom: '12px',
+                    textShadow: '0 2px 10px rgba(0,0,0,0.2)'
+                  }
+                }, 'Financial Health Checklist'),
+                React.createElement('p', {
+                  style: {
+                    fontSize: '18px',
+                    opacity: 0.9
+                  }
+                }, 'A comprehensive assessment of your financial planning')
+              ),
+              React.createElement('div', {
+                style: {
+                  background: 'rgba(255,255,255,0.2)',
+                  borderRadius: '999px',
+                  height: '12px',
+                  marginBottom: '32px',
+                  overflow: 'hidden',
+                  backdropFilter: 'blur(10px)'
+                }
+              },
+                React.createElement('div', {
+                  style: {
+                    height: '100%',
+                    width: `${progress}%`,
+                    background: 'linear-gradient(90deg, #10b981, #34d399)',
+                    transition: 'width 0.5s ease-out',
+                    borderRadius: '999px',
+                    boxShadow: '0 0 20px rgba(16, 185, 129, 0.6)'
+                  }
+                })
+              ),
+              React.createElement('div', {
+                style: {
+                  textAlign: 'center',
+                  color: 'white',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  marginBottom: '32px'
+                }
+              }, `Question ${currentQuestion + 1} of ${questions.length}`),
+              React.createElement('div', {
+                style: {
+                  background: 'white',
+                  borderRadius: '24px',
+                  padding: '48px',
+                  boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
+                }
+              },
+                React.createElement('div', {
+                  style: {
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: '#eff6ff',
+                    color: '#1e40af',
+                    padding: '8px 16px',
+                    borderRadius: '999px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    marginBottom: '24px'
+                  }
+                },
+                  React.createElement(Icon, { size: 18 }),
+                  currentQ.category
+                ),
+                React.createElement('h2', {
+                  style: {
+                    fontSize: '28px',
+                    fontWeight: '700',
+                    color: '#1f2937',
+                    marginBottom: '32px',
+                    lineHeight: '1.4'
+                  }
+                }, currentQ.question),
+                React.createElement('div', {
+                  style: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '16px',
+                    marginBottom: '32px'
+                  }
+                },
+                  currentQ.options.map((option, idx) =>
+                    React.createElement('button', {
+                      key: idx,
+                      onClick: () => handleAnswer(option.points, option.feedback),
+                      style: {
+                        padding: '20px 24px',
+                        background: 'white',
+                        border: '3px solid #e5e7eb',
+                        borderRadius: '16px',
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        color: '#374151',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'all 0.2s',
+                        position: 'relative',
+                        overflow: 'hidden'
+                      },
+                      onMouseOver: (e) => {
+                        e.currentTarget.style.borderColor = '#667eea';
+                        e.currentTarget.style.background = '#f9fafb';
+                        e.currentTarget.style.transform = 'translateX(8px)';
+                      },
+                      onMouseOut: (e) => {
+                        e.currentTarget.style.borderColor = '#e5e7eb';
+                        e.currentTarget.style.background = 'white';
+                        e.currentTarget.style.transform = 'translateX(0)';
+                      }
+                    },
+                      React.createElement('div', {
+                        style: {
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '12px'
+                        }
+                      },
+                        React.createElement('div', {
+                          style: {
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '50%',
+                            background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                            color: 'white',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '14px',
+                            fontWeight: '700',
+                            flexShrink: 0
+                          }
+                        }, String.fromCharCode(65 + idx)),
+                        option.text
+                      )
+                    )
+                  )
+                ),
+                React.createElement('div', {
+                  style: {
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingTop: '24px',
+                    borderTop: '2px solid #f3f4f6'
+                  }
+                },
+                  React.createElement('button', {
+                    onClick: goBack,
+                    disabled: currentQuestion === 0,
+                    style: {
+                      padding: '12px 24px',
+                      background: currentQuestion === 0 ? '#f3f4f6' : 'white',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '12px',
+                      fontSize: '15px',
+                      fontWeight: '600',
+                      color: currentQuestion === 0 ? '#9ca3af' : '#374151',
+                      cursor: currentQuestion === 0 ? 'not-allowed' : 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      transition: 'all 0.2s'
+                    },
+                    onMouseOver: (e) => {
+                      if (currentQuestion > 0) {
+                        e.currentTarget.style.background = '#f9fafb';
+                      }
+                    },
+                    onMouseOut: (e) => {
+                      if (currentQuestion > 0) {
+                        e.currentTarget.style.background = 'white';
+                      }
+                    }
+                  },
+                    React.createElement(ChevronLeft, { size: 18 }),
+                    'Previous'
+                  ),
+                  React.createElement('div', {
+                    style: {
+                      fontSize: '14px',
+                      color: '#6b7280',
+                      fontWeight: '500'
+                    }
+                  }, `${Object.keys(answers).length} of ${questions.length} answered`)
+                )
+              ),
+              React.createElement('div', {
+                style: {
+                  textAlign: 'center',
+                  marginTop: '24px',
+                  color: 'white',
+                  fontSize: '14px',
+                  opacity: 0.8'
+                }
+              },
+                React.createElement('p', null, '💡 Take your time and answer honestly for the most accurate assessment')
+              )
+            )
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(FinancialHealthChecklist));
+    </script>
+</body>
+</html>
