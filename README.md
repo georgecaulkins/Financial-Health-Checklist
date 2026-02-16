@@ -117,8 +117,8 @@ This project is open source and available for free use. Feel free to fork, modif
 
 ## 📞 Contact
 
-Created by [George Caulkins]  
-Financial Planner | [Prudential Advisors]
+Created by George Caulkins  
+Financial Planner | Prudential Advisors
 
 - 💼 LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/george-caulkins)
 - 📧 Email: george.caulkins@prudential.com
