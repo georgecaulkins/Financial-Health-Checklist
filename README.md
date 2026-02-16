@@ -4,9 +4,8 @@ A comprehensive, interactive financial planning assessment tool that evaluates y
 
 ## 🎯 Live Demo
 
-[Take the Assessment Now](https://yourusername.github.io/financial-health-checklist/)
+[Take the Assessment Now](https://georgecaulkins.github.io/Financial-Health-Checklist/)
 
-*(Replace with your actual GitHub Pages URL)*
 
 ---
 
@@ -118,12 +117,11 @@ This project is open source and available for free use. Feel free to fork, modif
 
 ## 📞 Contact
 
-Created by [Your Name]  
-Financial Planner | [Your Company]
+Created by [George Caulkins]  
+Financial Planner | [Prudential Advisors]
 
-- 🌐 Website: [yourwebsite.com](https://yourwebsite.com)
-- 💼 LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
-- 📧 Email: your.email@example.com
+- 💼 LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/george-caulkins)
+- 📧 Email: george.caulkins@prudential.com
 
 ---
 
